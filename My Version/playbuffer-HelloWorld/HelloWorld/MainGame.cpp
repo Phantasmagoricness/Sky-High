@@ -18,6 +18,11 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 {
 	Play::CreateManager( gState.DISPLAY_WIDTH, gState.DISPLAY_HEIGHT, gState.DISPLAY_SCALE );
 	Play::CentreAllSpriteOrigins();
+	
+	// sprites that for landing on the asteroids
+	Play::SetSpriteOrigin("agent8_right_7", 0, 256);
+	Play::SetSpriteOrigin("agent8_left_7", 0, 256);
+
 	Play::LoadBackground("Data\\Backgrounds\\background.png");
 	// just testing the player spawning
 	gState.player = new Player({ 320,180 }, { 0,0 });

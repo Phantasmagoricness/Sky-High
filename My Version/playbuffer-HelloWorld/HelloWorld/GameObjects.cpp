@@ -66,7 +66,8 @@ void Asteroid::Update(GameState& gState)
 
 		if (HasCollidedAsteroid(gState.player, a) == true)
 		{
-
+			gState.attachedAsteroid = a;
+			gState.player->SetRotationSpeed(0.04f);
 		}
 		Play::DrawSpriteRotated("asteroid_2", a->GetPosition(), 1, a->GetRotation(), 1, 1.0f);
 	}

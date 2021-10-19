@@ -61,6 +61,7 @@ protected:
 	int m_speed{ 8 };
 	int m_hight{ 50 };
 	int m_width{ 50 };
+	int m_center{ 0 };
 };
 
 class Meteor : public GameObjects

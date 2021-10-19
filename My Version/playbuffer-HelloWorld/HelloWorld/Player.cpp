@@ -30,11 +30,11 @@ void Player::Update(GameState& gState)
 	}
 	case 1: // state attached
 	{
+		// follow the asteroid through gState.attachedAsteroid->blablabla
 		break;
 	}
 	case 2: // state dead
 	{
-		SetSpeed(5);
 		double x = GetSpeed() * sin(GetRotation());
 		double y = GetSpeed() * -cos(GetRotation());
 		SetVelocity({ float(x), float(y) });

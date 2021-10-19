@@ -16,6 +16,7 @@ struct GameState
 	std::vector<Asteroid*>asteroid;
 	std::vector<Gem*>gem;
 	Player *player;
+	Asteroid *attachedAsteroid;
 	// level stuff
 	int level = 0;
 	int goal = 0;

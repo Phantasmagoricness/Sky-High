@@ -87,6 +87,10 @@ public:
 	{
 		return m_playerState;
 	}
+	void SetRotationSpeed(float rotaionSpeed)
+	{
+		m_rotationSpeed = rotaionSpeed;
+	}
 	float GetRotationSpeed()
 	{
 		return m_rotationSpeed;
