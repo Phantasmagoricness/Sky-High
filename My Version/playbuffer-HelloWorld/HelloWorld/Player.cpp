@@ -11,53 +11,63 @@ Player::Player(Point2f pos, Vector2f velocity)
 
 void Player::Update(GameState& gState)
 {
-	for (Player* p : gState.player)
-	{
-		switch (Player::PlayerState())
+		switch ( m_playerState )
 		{
-		case STATE_FLYING:
+		case 0: // state flying
 		{
 			if (Play::KeyDown(VK_LEFT))
 			{
-				p->SetRotation(p->GetRotation() - p->GetRotationSpeed());
+				SetRotation(GetRotation() - GetRotationSpeed());
 			}
 			if (Play::KeyDown(VK_RIGHT))
 			{
-				p->SetRotation(p->GetRotation() + p->GetRotationSpeed());
+				SetRotation(GetRotation() + GetRotationSpeed());
 			}
-			double x = p->GetSpeed() * sin(p->GetRotation());
-			double y = p->GetSpeed() * -cos(p->GetRotation());
-			p->SetVelocity({ float(x), float(y) });
+			double x = GetSpeed() * sin(GetRotation());
+			double y = GetSpeed() * -cos(GetRotation());
+			SetVelocity({ float(x), float(y) });
 			break;
 		}
-		case STATE_ATTACHED:
+		case 1: // state attached
 		{
 			break;
 		}
-		case STATE_DEAD:
+		case 2: // state dead
 		{
-			double x = p->GetSpeed() * sin(p->GetRotation());
-			double y = p->GetSpeed() * -cos(p->GetRotation());
-			p->SetVelocity({ float(x), float(y) });
+			double x = GetSpeed() * sin(GetRotation());
+			double y = GetSpeed() * -cos(GetRotation());
+			SetVelocity({ float(x), float(y) });
 			break;
 		}
 		break;
 		}
 
-		p->SetPosition(p->GetPosition() + p->GetVelocity());
+		SetPosition(GetPosition() + GetVelocity());
 
-		if (InGameScreen(gState, p->GetPosition(), p->GetVelocity()) != 0)
+		if (m_playerState != STATE_DEAD)
 		{
-			if (InGameScreen(gState, p->GetPosition(), p->GetVelocity()) == 1)
-				p->SetPosition({ p->GetPosition().x + gState.DISPLAY_WIDTH, p->GetPosition().y });
-			if (InGameScreen(gState, p->GetPosition(), p->GetVelocity()) == 2)
-				p->SetPosition({ p->GetPosition().x - gState.DISPLAY_WIDTH, p->GetPosition().y });
-			if (InGameScreen(gState, p->GetPosition(), p->GetVelocity()) == 3)
-				p->SetPosition({ p->GetPosition().x, p->GetPosition().y + gState.DISPLAY_HEIGHT });
-			if (InGameScreen(gState, p->GetPosition(), p->GetVelocity()) == 4)
-				p->SetPosition({ p->GetPosition().x, p->GetPosition().y - gState.DISPLAY_HEIGHT });
+			if (InGameScreen(gState, GetPosition(), GetVelocity()) != 0)
+			{
+				if (InGameScreen(gState, GetPosition(), GetVelocity()) == 1)
+					SetPosition({ GetPosition().x + gState.DISPLAY_WIDTH, GetPosition().y });
+				if (InGameScreen(gState, GetPosition(), GetVelocity()) == 2)
+					SetPosition({ GetPosition().x - gState.DISPLAY_WIDTH, GetPosition().y });
+				if (InGameScreen(gState, GetPosition(), GetVelocity()) == 3)
+					SetPosition({ GetPosition().x, GetPosition().y + gState.DISPLAY_HEIGHT });
+				if (InGameScreen(gState, GetPosition(), GetVelocity()) == 4)
+					SetPosition({ GetPosition().x, GetPosition().y - gState.DISPLAY_HEIGHT });
+			}
+		}
+		else
+		{
+			// restart the game
+			// level = 0
+			//goal = 0
+			// playerState = attached
+			// player pos = starting pos
+			// player pos = starting pos
 		}
 
-		Play::DrawSpriteRotated("agent8_fly", p->GetPosition(), 1, p->GetRotation(), 1, 1.0f);
-	}
+		Play::DrawSpriteRotated("agent8_fly", GetPosition(), 1, GetRotation(), 1, 1.0f);
+
 }

@@ -59,8 +59,8 @@ protected:
 	Vector2f m_velocity{ 0,0 };
 	float m_rotation{ 0 };
 	int m_speed{ 8 };
-	int m_hight{ 10 };
-	int m_width{ 10 };
+	int m_hight{ 50 };
+	int m_width{ 50 };
 };
 
 class Meteor : public GameObjects

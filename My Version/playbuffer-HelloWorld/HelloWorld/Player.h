@@ -78,7 +78,7 @@ public:
 		STATE_ATTACHED,
 		STATE_DEAD,
 	};
-	static void Update(GameState& gState);
+	void Update(GameState& gState);
 	void SetState(int playerState)
 	{
 		m_playerState = PlayerState(playerState);
@@ -93,7 +93,7 @@ public:
 		return m_spriteName;
 	}*/
 private:
-	PlayerState m_playerState{ STATE_ATTACHED };
+	PlayerState m_playerState{ STATE_FLYING };
 	float m_rotationSpeed{ 0.02f };
 	//char m_spriteName;
 };

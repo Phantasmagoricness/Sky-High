@@ -20,9 +20,8 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 	Play::CentreAllSpriteOrigins();
 	Play::LoadBackground("Data\\Backgrounds\\background.png");
 	// just testing the player spawning
-	Player* p = new Player({ 320,180 }, { 0,0 });
-	p->SetSpeed(3);
-	gState.player.push_back(p);
+	gState.player = new Player({ 320,180 }, { 0,0 });
+	gState.player->SetSpeed(3);
 }
 
 // Called by PlayBuffer every frame (60 times a second!)
@@ -30,7 +29,7 @@ bool MainGameUpdate( float elapsedTime )
 {
 	Play::DrawBackground();
 	//Play::ClearDrawingBuffer( Play::cOrange );
-	Player::Update(gState);
+	gState.player->Update(gState);
 
 	//level update
 	LevelUpdater();

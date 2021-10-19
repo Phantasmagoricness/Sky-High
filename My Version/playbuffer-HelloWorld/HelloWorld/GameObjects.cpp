@@ -38,12 +38,9 @@ void Meteor::Update(GameState& gState)
 				m->SetPosition({ m->GetPosition().x, m->GetPosition().y - gState.DISPLAY_HEIGHT });
 		}
 
-		for (Player* p : gState.player)
+		if (HasCollidedMeteor(gState.player, m) == true)
 		{
-			if (HasCollidedMeteor(p, m) == true)
-			{
-				p->SetState({ 2 });
-			}
+			gState.player->SetState({ 2 });
 		}
 		Play::DrawSpriteRotated("meteor_2", m->GetPosition(), 1, m->GetRotation(), 1, 1.0f);
 	}
@@ -85,7 +82,7 @@ void spawnObjects(GameState& gState)
 			a->SetVelocity({ float(x), float(y) });
 			gState.asteroid.push_back(a);
 		}
-		else if(Play::RandomRollRange(1, 2) == 2)
+		else if (Play::RandomRollRange(1, 2) == 2)
 		{
 			Asteroid* a = new Asteroid({ 0, Play::RandomRollRange(0, gState.DISPLAY_HEIGHT) }, { Play::RandomRollRange(0,360) });
 			double x = a->GetSpeed() * sin(a->GetRotation());
