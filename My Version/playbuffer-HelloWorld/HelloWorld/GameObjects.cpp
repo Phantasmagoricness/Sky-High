@@ -64,6 +64,10 @@ void Asteroid::Update(GameState& gState)
 				a->SetPosition({ a->GetPosition().x, a->GetPosition().y - gState.DISPLAY_HEIGHT });
 		}
 
+		if (HasCollidedAsteroid(gState.player, a) == true)
+		{
+
+		}
 		Play::DrawSpriteRotated("asteroid_2", a->GetPosition(), 1, a->GetRotation(), 1, 1.0f);
 	}
 }

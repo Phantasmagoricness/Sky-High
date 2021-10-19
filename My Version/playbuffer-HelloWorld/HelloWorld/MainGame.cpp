@@ -21,7 +21,7 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 	Play::LoadBackground("Data\\Backgrounds\\background.png");
 	// just testing the player spawning
 	gState.player = new Player({ 320,180 }, { 0,0 });
-	gState.player->SetSpeed(3);
+	gState.player->SetSpeed(5);
 }
 
 // Called by PlayBuffer every frame (60 times a second!)
@@ -83,4 +83,31 @@ bool HasCollidedMeteor(Player* p, Meteor* m)
 	if (p->GetPosition().x < m->GetPosition().x + m->GetWidth() && p->GetPosition().x + p->GetWidth() > m->GetPosition().x &&
 		p->GetPosition().y < m->GetPosition().y + m->GetHight() && p->GetPosition().y + p->GetHight() > m->GetPosition().y)
 		return true;
+}
+
+bool HasCollidedAsteroid(Player* p, Asteroid* a)
+{
+	if (p->GetPosition().x < a->GetPosition().x + a->GetWidth() && p->GetPosition().x + a->GetWidth() > a->GetPosition().x &&
+		p->GetPosition().y < a->GetPosition().y + a->GetHight() && p->GetPosition().y + a->GetHight() > a->GetPosition().y)
+		return true;
+}
+
+void ResetAll()
+{
+	Player* p = gState.player;
+	gState.level = 0;
+	gState.goal = 0;
+	p->SetState(0); 
+	p->SetPosition({ (Play::RandomRollRange(0, gState.DISPLAY_WIDTH) + 30), gState.DISPLAY_HEIGHT });
+	p->SetRotation({ 0 });
+
+	for (int m = 0; m < gState.meteor.size(); m++)
+	{
+		gState.meteor.erase(gState.meteor.begin() + m);
+	}
+
+	for (int a = 0; a < gState.asteroid.size(); a++)
+	{
+		gState.asteroid.erase(gState.asteroid.begin() + a);
+	}
 }

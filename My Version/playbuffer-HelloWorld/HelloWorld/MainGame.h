@@ -1,7 +1,6 @@
 #pragma once
 #include "Play.h"
 
-
 class Meteor;
 class Asteroid;
 class Gem;
@@ -26,3 +25,5 @@ struct GameState
 
 int InGameScreen(GameState& gState, Point2f pos, Vector2f velocity);
 bool HasCollidedMeteor(Player* p, Meteor* m);
+bool HasCollidedAsteroid(Player* p, Asteroid* a);
+void ResetAll();

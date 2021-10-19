@@ -83,6 +83,10 @@ public:
 	{
 		m_playerState = PlayerState(playerState);
 	}
+	PlayerState GetState()
+	{
+		return m_playerState;
+	}
 	float GetRotationSpeed()
 	{
 		return m_rotationSpeed;
