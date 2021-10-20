@@ -54,6 +54,14 @@ public:
 	{
 		m_width = w;
 	}
+	void SetDelete(bool y_n)
+	{
+		m_delete = y_n;
+	}
+	bool GetDelete()
+	{
+		return m_delete;
+	}
 protected:
 	Point2f m_pos{ 0,0 };
 	Vector2f m_velocity{ 0,0 };
@@ -62,6 +70,7 @@ protected:
 	int m_hight{ 50 };
 	int m_width{ 50 };
 	int m_center{ 0 };
+	bool m_delete{ false };
 };
 
 class Meteor : public GameObjects
@@ -91,10 +100,9 @@ private:
 class Gem : public GameObjects
 {
 public:
-	Gem(Point2f pos, int speed)
+	Gem(Point2f pos)
 	{
 		m_pos = pos;
-		m_speed = speed;
 	}
 private:
 };

@@ -20,8 +20,10 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 	Play::CentreAllSpriteOrigins();
 	
 	// sprites that for landing on the asteroids
-	Play::SetSpriteOrigin("agent8_right_7", 0, 256);
-	Play::SetSpriteOrigin("agent8_left_7", 0, 256);
+	Play::SetSpriteOrigin("agent8_right_7", 60, 115);
+	Play::SetSpriteOrigin("agent8_left_7", 60, 115);
+	Play::SetSpriteOrigin("asteroid_2", 75, 80);
+	Play::SetSpriteOrigin("agent8_fly", 70, 45);
 
 	Play::LoadBackground("Data\\Backgrounds\\background.png");
 	// just testing the player spawning
@@ -46,8 +48,16 @@ bool MainGameUpdate( float elapsedTime )
 	Play::DrawFontText("64px", "Level = " + std::to_string(gState.level), { gState.DISPLAY_WIDTH / 10, 25 }, Play::CENTRE);
 	Play::DrawFontText("64px", "Goal = " + std::to_string(gState.level), { gState.DISPLAY_WIDTH / 10, 75 }, Play::CENTRE);
 	// text
+
+	//testing
+	Play::DrawSpriteRotated("asteroid_pieces_3", { gState.DISPLAY_WIDTH / 2, gState.DISPLAY_HEIGHT / 2 }, 1, 0, 1, 1.0f);
+	Play::DrawSpriteRotated("asteroid_pieces_3", { gState.DISPLAY_WIDTH / 2, gState.DISPLAY_HEIGHT / 2 }, 2, 0, 1, 1.0f);
+	Play::DrawSpriteRotated("asteroid_pieces_3", { gState.DISPLAY_WIDTH / 2, gState.DISPLAY_HEIGHT / 2 }, 3, 0, 1, 1.0f);
+	Play::DrawFontText("64px", "+", { gState.DISPLAY_WIDTH / 2, gState.DISPLAY_HEIGHT / 2 }, Play::CENTRE);
+
 	Play::PresentDrawingBuffer();
 	return Play::KeyDown( VK_ESCAPE );
+
 }
 
 // Gets called once when the player quits the game 

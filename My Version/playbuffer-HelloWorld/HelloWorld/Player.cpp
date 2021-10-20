@@ -13,7 +13,7 @@ void Player::Update(GameState& gState)
 {
 	switch (m_playerState)
 	{
-	case 0: // state flying
+	case STATE_FLYING:
 	{
 		if (Play::KeyDown(VK_LEFT))
 		{
@@ -26,28 +26,47 @@ void Player::Update(GameState& gState)
 		double x = GetSpeed() * sin(GetRotation());
 		double y = GetSpeed() * -cos(GetRotation());
 		SetVelocity({ float(x), float(y) });
+		SetPosition(GetPosition() + GetVelocity());
+		Play::DrawSpriteRotated("agent8_fly", GetPosition(), 1, GetRotation(), 1, 1.0f);
 		break;
 	}
-	case 1: // state attached
+	case STATE_ATTACHED:
 	{
 		// follow the asteroid through gState.attachedAsteroid->blablabla
+		SetPosition(gState.attachedAsteroid->GetPosition());
+		SetPosition(gState.attachedAsteroid->GetPosition() + gState.attachedAsteroid->GetVelocity());
+		if (Play::KeyDown(VK_LEFT))
+		{
+			SetRotation(GetRotation() - GetRotationSpeed());
+		}
+		if (Play::KeyDown(VK_RIGHT))
+		{
+			SetRotation(GetRotation() + GetRotationSpeed());
+		}
+		if (Play::KeyDown(VK_SPACE))
+		{
+			Gem* g = new Gem(gState.attachedAsteroid->GetPosition());
+			gState.gem.push_back(g);
+			gState.attachedAsteroid = NULL;
+			SetState(0);
+		}
+		SetPosition(GetPosition() + GetVelocity());
+		Play::DrawSpriteRotated("agent8_right_7", GetPosition(), 1, -GetRotation(), 1, 1.0f);
 		break;
 	}
-	case 2: // state dead
+	case STATE_DEAD:
 	{
 		double x = GetSpeed() * sin(GetRotation());
 		double y = GetSpeed() * -cos(GetRotation());
 		SetVelocity({ float(x), float(y) });
 		if (InGameScreen(gState, GetPosition(), GetVelocity()) != 0)
 			ResetAll();
+		SetPosition(GetPosition() + GetVelocity());
 		Play::DrawSpriteRotated("agent8_dead_2", GetPosition(), 1, GetRotation(), 1, 1.0f);
 		break;
 	}
 	break;
 	}
-
-	SetPosition(GetPosition() + GetVelocity());
-
 	if (m_playerState != STATE_DEAD)
 	{
 		if (InGameScreen(gState, GetPosition(), GetVelocity()) != 0)
@@ -61,7 +80,6 @@ void Player::Update(GameState& gState)
 			if (InGameScreen(gState, GetPosition(), GetVelocity()) == 4)
 				SetPosition({ GetPosition().x, GetPosition().y - gState.DISPLAY_HEIGHT });
 		}
-		Play::DrawSpriteRotated("agent8_fly", GetPosition(), 1, GetRotation(), 1, 1.0f);
 	}
 
 
