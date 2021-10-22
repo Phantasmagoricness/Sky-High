@@ -14,6 +14,8 @@ public:
 	void Update(GameState& gState);
 	void SetState(int playerState)
 	{
+		if (playerState == STATE_ATTACHED)
+			playerState = STATE_ATTACHED;
 		m_playerState = PlayerState(playerState);
 	}
 	PlayerState GetState()

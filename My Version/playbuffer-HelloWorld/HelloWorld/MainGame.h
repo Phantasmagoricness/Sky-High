@@ -12,9 +12,9 @@ struct GameState
 	int DISPLAY_HEIGHT = 720;
 	int DISPLAY_SCALE = 1;
 	// gameobject stuff
-	std::vector<Meteor*>meteor;
-	std::vector<Asteroid*>asteroid;
-	std::vector<Gem*>gem;
+	//std::vector<Meteor*>meteor;
+	//std::vector<Asteroid*>asteroid;
+	//std::vector<Gem*>gem;
 	Player *player;
 	Asteroid *attachedAsteroid;
 	// level stuff
@@ -27,4 +27,5 @@ struct GameState
 int InGameScreen(GameState& gState, Point2f pos, Vector2f velocity);
 bool HasCollidedMeteor(Player* p, Meteor* m);
 bool HasCollidedAsteroid(Player* p, Asteroid* a);
+bool HasCollidedGem(Player* p, Gem* g);
 void ResetAll();

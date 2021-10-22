@@ -20,9 +20,13 @@
 //		return 0;
 //}
 
-void Meteor::Update(GameState& gState)
+std::vector< Meteor* > Meteor::vMeteors;
+std::vector< Asteroid* > Asteroid::vAsteroids;
+std::vector< Gem* > Gem::vGems;
+
+void Meteor::UpdateAll(GameState& gState)
 {
-	for (Meteor* m : gState.meteor)
+	for (Meteor* m : vMeteors)
 	{
 		m->SetPosition(m->GetPosition() + m->GetVelocity());
 
@@ -40,7 +44,7 @@ void Meteor::Update(GameState& gState)
 
 		if (HasCollidedMeteor(gState.player, m) == true)
 		{
-			gState.player->SetState({ 2 });
+			gState.player->SetState({ Player::STATE_DEAD });
 		}
 		Play::DrawSpriteRotated("meteor_2", m->GetPosition(), 1, m->GetRotation(), 1, 1.0f);
 	}
@@ -48,7 +52,7 @@ void Meteor::Update(GameState& gState)
 
 void Asteroid::Update(GameState& gState)
 {
-	for (Asteroid* a : gState.asteroid)
+	for (Asteroid* a : vAsteroids)
 	{
 		int i = 0;
 		i++;
@@ -66,12 +70,12 @@ void Asteroid::Update(GameState& gState)
 				a->SetPosition({ a->GetPosition().x, a->GetPosition().y - gState.DISPLAY_HEIGHT });
 		}
 
-		if (HasCollidedAsteroid(gState.player, a) == true && gState.attachedAsteroid == NULL)
+		if (HasCollidedAsteroid(gState.player, a) == true && gState.attachedAsteroid == NULL && gState.player->GetState() == Player::STATE_FLYING)
 		{
 			gState.attachedAsteroid = a;
 			gState.player->SetRotationSpeed(0.04f);
 			//gState.player->SetRotation(gState.player->GetRotation() * -1);
-			gState.player->SetState(1);
+			gState.player->SetState(Player::STATE_ATTACHED);
 		}
 
 		//if (a->GetDelete() == true)
@@ -80,6 +84,20 @@ void Asteroid::Update(GameState& gState)
 		//}
 		Play::DrawSpriteRotated("asteroid_2", a->GetPosition(), 1, a->GetRotation(), 1, 1.0f);
 	}
+}
+
+void Gem::Update(GameState& gState)
+{
+	for (Gem* g : vGems)
+	{
+		if (HasCollidedGem(gState.player, g) == true)
+		{
+			gState.goal -= 1;
+			g->SetDelete(true);
+		}
+		Play::DrawSpriteRotated("gem", g->GetPosition(), 1, g->GetRotation(), 1, 1.0f);
+	}
+
 }
 
 // spawning objects
@@ -96,7 +114,7 @@ void spawnObjects(GameState& gState)
 			a->SetVelocity({ float(x), float(y) });
 			a->SetHight(75);
 			a->SetWidth(75);
-			gState.asteroid.push_back(a);
+			//gState.asteroid.push_back(a);
 		}
 		else if (Play::RandomRollRange(1, 2) == 2)
 		{
@@ -106,7 +124,7 @@ void spawnObjects(GameState& gState)
 			a->SetVelocity({ float(x), float(y) });
 			a->SetHight(75);
 			a->SetWidth(75);
-			gState.asteroid.push_back(a);
+			//gState.asteroid.push_back(a);
 		}
 	}
 
@@ -118,15 +136,15 @@ void spawnObjects(GameState& gState)
 			double x = m->GetSpeed() * sin(m->GetRotation());
 			double y = m->GetSpeed() * -cos(m->GetRotation());
 			m->SetVelocity({ float(x), float(y) });
-			gState.meteor.push_back(m);
+			//gState.meteor.push_back(m);
 		}
-	//	else if (Play::RandomRollRange(0, 2) == 2)
-	//	{
-	//		Meteor* m = new Meteor({ Play::RandomRollRange(0, gState.DISPLAY_WIDTH), 0 }, { Play::RandomRollRange(0,360) });
-	//		double x = m->GetSpeed() * sin(m->GetRotation());
-	//		double y = m->GetSpeed() * -cos(m->GetRotation());
-	//		m->SetVelocity({ float(x), float(y) });
-	//		gState.meteor.push_back(m);
-	//	}
+		//	else if (Play::RandomRollRange(0, 2) == 2)
+		//	{
+		//		Meteor* m = new Meteor({ Play::RandomRollRange(0, gState.DISPLAY_WIDTH), 0 }, { Play::RandomRollRange(0,360) });
+		//		double x = m->GetSpeed() * sin(m->GetRotation());
+		//		double y = m->GetSpeed() * -cos(m->GetRotation());
+		//		m->SetVelocity({ float(x), float(y) });
+		//		gState.meteor.push_back(m);
+		//	}
 	}
 }

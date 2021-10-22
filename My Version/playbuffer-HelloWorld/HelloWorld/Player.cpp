@@ -46,9 +46,9 @@ void Player::Update(GameState& gState)
 		if (Play::KeyDown(VK_SPACE))
 		{
 			Gem* g = new Gem(gState.attachedAsteroid->GetPosition());
-			gState.gem.push_back(g);
-			gState.attachedAsteroid = NULL;
-			SetState(0);
+			//gState.gem.push_back(g);
+			gState.attachedAsteroid->SetDelete(true);
+			SetState(STATE_FLYING);
 		}
 		SetPosition(GetPosition() + GetVelocity());
 		Play::DrawSpriteRotated("agent8_right_7", GetPosition(), 1, -GetRotation(), 1, 1.0f);
@@ -62,6 +62,7 @@ void Player::Update(GameState& gState)
 		if (InGameScreen(gState, GetPosition(), GetVelocity()) != 0)
 			ResetAll();
 		SetPosition(GetPosition() + GetVelocity());
+		gState.attachedAsteroid = NULL;
 		Play::DrawSpriteRotated("agent8_dead_2", GetPosition(), 1, GetRotation(), 1, 1.0f);
 		break;
 	}

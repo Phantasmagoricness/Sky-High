@@ -12,13 +12,14 @@
 GameState gState;
 
 void LevelUpdater();
+void CleanUpAll();
 
 // The entry point for a PlayBuffer program
-void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
+void MainGameEntry(PLAY_IGNORE_COMMAND_LINE)
 {
-	Play::CreateManager( gState.DISPLAY_WIDTH, gState.DISPLAY_HEIGHT, gState.DISPLAY_SCALE );
+	Play::CreateManager(gState.DISPLAY_WIDTH, gState.DISPLAY_HEIGHT, gState.DISPLAY_SCALE);
 	Play::CentreAllSpriteOrigins();
-	
+
 	// sprites that for landing on the asteroids
 	Play::SetSpriteOrigin("agent8_right_7", 60, 115);
 	Play::SetSpriteOrigin("agent8_left_7", 60, 115);
@@ -32,7 +33,7 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 }
 
 // Called by PlayBuffer every frame (60 times a second!)
-bool MainGameUpdate( float elapsedTime )
+bool MainGameUpdate(float elapsedTime)
 {
 	Play::DrawBackground();
 	//Play::ClearDrawingBuffer( Play::cOrange );
@@ -40,8 +41,9 @@ bool MainGameUpdate( float elapsedTime )
 
 	//level update
 	LevelUpdater();
-	Meteor::Update(gState);
+	Meteor::UpdateAll(gState);
 	Asteroid::Update(gState);
+	Gem::Update(gState);
 	//level update
 
 	// text
@@ -55,13 +57,14 @@ bool MainGameUpdate( float elapsedTime )
 	Play::DrawSpriteRotated("asteroid_pieces_3", { gState.DISPLAY_WIDTH / 2, gState.DISPLAY_HEIGHT / 2 }, 3, 0, 1, 1.0f);
 	Play::DrawFontText("64px", "+", { gState.DISPLAY_WIDTH / 2, gState.DISPLAY_HEIGHT / 2 }, Play::CENTRE);
 
+	CleanUpAll();
 	Play::PresentDrawingBuffer();
-	return Play::KeyDown( VK_ESCAPE );
+	return Play::KeyDown(VK_ESCAPE);
 
 }
 
 // Gets called once when the player quits the game 
-int MainGameExit( void )
+int MainGameExit(void)
 {
 	Play::DestroyManager();
 	return PLAY_OK;
@@ -107,22 +110,31 @@ bool HasCollidedAsteroid(Player* p, Asteroid* a)
 		return true;
 }
 
+bool HasCollidedGem(Player* p, Gem* g)
+{
+	if (p->GetPosition().x < g->GetPosition().x + g->GetWidth() && p->GetPosition().x + g->GetWidth() > g->GetPosition().x &&
+		p->GetPosition().y < g->GetPosition().y + g->GetHight() && p->GetPosition().y + g->GetHight() > g->GetPosition().y)
+		return true;
+}
+
+
 void ResetAll()
 {
 	Player* p = gState.player;
 	gState.level = 0;
 	gState.goal = 0;
-	p->SetState(0); 
+	p->SetState(0);
 	p->SetPosition({ (Play::RandomRollRange(0, gState.DISPLAY_WIDTH) + 30), gState.DISPLAY_HEIGHT });
 	p->SetRotation({ 0 });
 
-	for (int m = 0; m < gState.meteor.size(); m++)
-	{
-		gState.meteor.erase(gState.meteor.begin() + m);
-	}
+	Meteor::CleanUpAll(true);
+	Asteroid::CleanUpAll(true);
+	Gem::CleanUpAll(true);
+}
 
-	for (int a = 0; a < gState.asteroid.size(); a++)
-	{
-		gState.asteroid.erase(gState.asteroid.begin() + a);
-	}
+void CleanUpAll()
+{
+	Meteor::CleanUpAll();
+	Asteroid::CleanUpAll();
+	Gem::CleanUpAll();
 }

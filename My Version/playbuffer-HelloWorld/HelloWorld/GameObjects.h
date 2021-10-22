@@ -76,12 +76,29 @@ protected:
 class Meteor : public GameObjects
 {
 public:
-	Meteor(Point2f pos,  int rotation)
+	Meteor(Point2f pos, int rotation)
 	{
 		m_pos = pos;
 		m_rotation = rotation;
+		vMeteors.push_back( this );
 	}
-	static void Update(GameState& gState);
+	~Meteor()
+	{
+		vMeteors.erase( std::find( vMeteors.begin(), vMeteors.end(), this ));
+	}
+	static void UpdateAll(GameState& gState);
+	static std::vector< Meteor* > vMeteors;
+	static void CleanUpAll(bool reset = false)
+	{
+		for (int i = 0; i < vMeteors.size(); i++)
+		{
+			if (vMeteors[i]->GetDelete() == true || reset == true)
+			{
+				delete(vMeteors[i]);
+				i--;
+			}
+		}
+	}
 private:
 };
 
@@ -92,8 +109,25 @@ public:
 	{
 		m_pos = pos;
 		m_rotation = rotation;
+		vAsteroids.push_back(this);
+	}
+	~Asteroid()
+	{
+		vAsteroids.erase(std::find(vAsteroids.begin(), vAsteroids.end(), this));
 	}
 	static void Update(GameState& gState);
+	static std::vector< Asteroid* > vAsteroids;
+	static void CleanUpAll(bool reset = false)
+	{
+		for (int i = 0; i < vAsteroids.size(); i++)
+		{
+			if (vAsteroids[i]->GetDelete() == true || reset == true)
+			{
+				delete(vAsteroids[i]);
+				i--;
+			}
+		}
+	}
 private:
 };
 
@@ -103,6 +137,24 @@ public:
 	Gem(Point2f pos)
 	{
 		m_pos = pos;
+		vGems.push_back(this);
+	}
+	~Gem()
+	{
+		vGems.erase(std::find(vGems.begin(), vGems.end(), this));
+	}
+	static void Update(GameState& gState);
+	static std::vector< Gem* > vGems;
+	static void CleanUpAll(bool reset = false)
+	{
+		for (int i = 0; i < vGems.size(); i++)
+		{
+			if (vGems[i]->GetDelete() == true || reset == true)
+			{
+				delete(vGems[i]);
+				i--;
+			}
+		}
 	}
 private:
 };
