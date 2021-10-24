@@ -23,9 +23,7 @@ void Player::Update(GameState& gState)
 		{
 			SetRotation(GetRotation() + GetRotationSpeed());
 		}
-		double x = GetSpeed() * sin(GetRotation());
-		double y = GetSpeed() * -cos(GetRotation());
-		SetVelocity({ float(x), float(y) });
+		SetVelocity();
 		SetPosition(GetPosition() + GetVelocity());
 		Play::DrawSpriteRotated("agent8_fly", GetPosition(), 1, GetRotation(), 1, 1.0f);
 		break;
@@ -46,8 +44,15 @@ void Player::Update(GameState& gState)
 		if (Play::KeyDown(VK_SPACE))
 		{
 			Gem* g = new Gem(gState.attachedAsteroid->GetPosition());
-			//gState.gem.push_back(g);
+			AsteroidPieces* up = new AsteroidPieces(gState.attachedAsteroid->GetPosition(), 0, 0);
+			up->SetVelocity();
+			AsteroidPieces* dLeft = new AsteroidPieces(gState.attachedAsteroid->GetPosition(), 2, 2);
+			dLeft->SetVelocity();
+			AsteroidPieces* dRight = new AsteroidPieces(gState.attachedAsteroid->GetPosition(), -1, 1);
+			dRight->SetVelocity();
 			gState.attachedAsteroid->SetDelete(true);
+			gState.attachedAsteroid = NULL;
+			SetState(0);
 			SetState(STATE_FLYING);
 		}
 		SetPosition(GetPosition() + GetVelocity());
@@ -56,9 +61,7 @@ void Player::Update(GameState& gState)
 	}
 	case STATE_DEAD:
 	{
-		double x = GetSpeed() * sin(GetRotation());
-		double y = GetSpeed() * -cos(GetRotation());
-		SetVelocity({ float(x), float(y) });
+		SetVelocity();
 		if (InGameScreen(gState, GetPosition(), GetVelocity()) != 0)
 			ResetAll();
 		SetPosition(GetPosition() + GetVelocity());

@@ -18,9 +18,11 @@ public:
 	{
 		return m_velocity;
 	}
-	void SetVelocity(Vector2f velocity)
+	void SetVelocity()
 	{
-		m_velocity = velocity;
+		double x = m_speed * sin(m_rotation);
+		double y = m_speed * -cos(m_rotation);
+		m_velocity = {float(x), float(y)};
 	}
 	float GetRotation()
 	{
@@ -80,11 +82,11 @@ public:
 	{
 		m_pos = pos;
 		m_rotation = rotation;
-		vMeteors.push_back( this );
+		vMeteors.push_back(this);
 	}
 	~Meteor()
 	{
-		vMeteors.erase( std::find( vMeteors.begin(), vMeteors.end(), this ));
+		vMeteors.erase(std::find(vMeteors.begin(), vMeteors.end(), this));
 	}
 	static void UpdateAll(GameState& gState);
 	static std::vector< Meteor* > vMeteors;
@@ -157,5 +159,40 @@ public:
 		}
 	}
 private:
+};
+
+class AsteroidPieces : public GameObjects
+{
+public:
+	AsteroidPieces(Point2f pos, float rotation, int frame)
+	{
+		m_pos = pos;
+		vAsteroidPieces.push_back(this);
+		m_frame = frame;
+		m_rotation = rotation;
+	}
+	~AsteroidPieces()
+	{
+		vAsteroidPieces.erase(std::find(vAsteroidPieces.begin(), vAsteroidPieces.end(), this));
+	}
+	static void Update(GameState& gState);
+	static std::vector< AsteroidPieces* > vAsteroidPieces;
+	static void CleanUpAll(bool reset = false)
+	{
+		for (int i = 0; i < vAsteroidPieces.size(); i++)
+		{
+			if (vAsteroidPieces[i]->GetDelete() == true || reset == true)
+			{
+				delete(vAsteroidPieces[i]);
+				i--;
+			}
+		}
+	}
+	int GetFrame()
+	{
+		return m_frame;
+	}
+private:
+	int m_frame = 1;
 };
 

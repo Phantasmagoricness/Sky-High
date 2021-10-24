@@ -22,6 +22,7 @@
 
 std::vector< Meteor* > Meteor::vMeteors;
 std::vector< Asteroid* > Asteroid::vAsteroids;
+std::vector< AsteroidPieces* > AsteroidPieces::vAsteroidPieces;
 std::vector< Gem* > Gem::vGems;
 
 void Meteor::UpdateAll(GameState& gState)
@@ -70,7 +71,7 @@ void Asteroid::Update(GameState& gState)
 				a->SetPosition({ a->GetPosition().x, a->GetPosition().y - gState.DISPLAY_HEIGHT });
 		}
 
-		if (HasCollidedAsteroid(gState.player, a) == true && gState.attachedAsteroid == NULL && gState.player->GetState() == Player::STATE_FLYING)
+		if (HasCollidedAsteroid(gState.player, a) == true && gState.attachedAsteroid == NULL && gState.player->GetState() == Player::STATE_FLYING && a->GetDelete() != true)
 		{
 			gState.attachedAsteroid = a;
 			gState.player->SetRotationSpeed(0.04f);
@@ -100,6 +101,18 @@ void Gem::Update(GameState& gState)
 
 }
 
+// notes for the asteroid pieces
+// the Asteroid Pieces should spawn with a different rotation to each other and use the x = sin and y = -cos but NOT the DrawSpriteRotated
+
+void AsteroidPieces::Update(GameState& gState)
+{
+	for (AsteroidPieces* ap : vAsteroidPieces)
+	{
+		ap->SetPosition(ap->GetPosition() + ap->GetVelocity());
+		Play::DrawSprite("asteroid_pieces_3", ap->GetPosition(), ap->GetFrame());
+	}
+}
+
 // spawning objects
 
 void spawnObjects(GameState& gState)
@@ -109,9 +122,7 @@ void spawnObjects(GameState& gState)
 		if (Play::RandomRollRange(1, 2) == 1)
 		{
 			Asteroid* a = new Asteroid({ Play::RandomRollRange(0, gState.DISPLAY_WIDTH), 0 }, { Play::RandomRollRange(0,360) });
-			double x = a->GetSpeed() * sin(a->GetRotation());
-			double y = a->GetSpeed() * -cos(a->GetRotation());
-			a->SetVelocity({ float(x), float(y) });
+			a->SetVelocity();
 			a->SetHight(75);
 			a->SetWidth(75);
 			//gState.asteroid.push_back(a);
@@ -119,9 +130,7 @@ void spawnObjects(GameState& gState)
 		else if (Play::RandomRollRange(1, 2) == 2)
 		{
 			Asteroid* a = new Asteroid({ 0, Play::RandomRollRange(0, gState.DISPLAY_HEIGHT) }, { Play::RandomRollRange(0,360) });
-			double x = a->GetSpeed() * sin(a->GetRotation());
-			double y = a->GetSpeed() * -cos(a->GetRotation());
-			a->SetVelocity({ float(x), float(y) });
+			a->SetVelocity();
 			a->SetHight(75);
 			a->SetWidth(75);
 			//gState.asteroid.push_back(a);
@@ -133,18 +142,13 @@ void spawnObjects(GameState& gState)
 		if (Play::RandomRollRange(1, 2) == 1)
 		{
 			Meteor* m = new Meteor({ 0, Play::RandomRollRange(0, gState.DISPLAY_HEIGHT) }, { Play::RandomRollRange(0,360) });
-			double x = m->GetSpeed() * sin(m->GetRotation());
-			double y = m->GetSpeed() * -cos(m->GetRotation());
-			m->SetVelocity({ float(x), float(y) });
+			m->SetVelocity();
 			//gState.meteor.push_back(m);
 		}
-		//	else if (Play::RandomRollRange(0, 2) == 2)
-		//	{
-		//		Meteor* m = new Meteor({ Play::RandomRollRange(0, gState.DISPLAY_WIDTH), 0 }, { Play::RandomRollRange(0,360) });
-		//		double x = m->GetSpeed() * sin(m->GetRotation());
-		//		double y = m->GetSpeed() * -cos(m->GetRotation());
-		//		m->SetVelocity({ float(x), float(y) });
-		//		gState.meteor.push_back(m);
-		//	}
+			else if (Play::RandomRollRange(0, 2) == 2)
+			{
+				Meteor* m = new Meteor({ Play::RandomRollRange(0, gState.DISPLAY_WIDTH), 0 }, { Play::RandomRollRange(0,360) });
+				m->SetVelocity();
+			}
 	}
 }

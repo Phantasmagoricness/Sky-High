@@ -23,7 +23,7 @@ void MainGameEntry(PLAY_IGNORE_COMMAND_LINE)
 	// sprites that for landing on the asteroids
 	Play::SetSpriteOrigin("agent8_right_7", 60, 115);
 	Play::SetSpriteOrigin("agent8_left_7", 60, 115);
-	Play::SetSpriteOrigin("asteroid_2", 75, 80);
+	Play::SetSpriteOrigin("asteroid_2", 85, 85);
 	Play::SetSpriteOrigin("agent8_fly", 70, 45);
 
 	Play::LoadBackground("Data\\Backgrounds\\background.png");
@@ -43,6 +43,7 @@ bool MainGameUpdate(float elapsedTime)
 	LevelUpdater();
 	Meteor::UpdateAll(gState);
 	Asteroid::Update(gState);
+	AsteroidPieces::Update(gState);
 	Gem::Update(gState);
 	//level update
 
@@ -129,6 +130,7 @@ void ResetAll()
 
 	Meteor::CleanUpAll(true);
 	Asteroid::CleanUpAll(true);
+	AsteroidPieces::CleanUpAll(true);
 	Gem::CleanUpAll(true);
 }
 
@@ -136,5 +138,6 @@ void CleanUpAll()
 {
 	Meteor::CleanUpAll();
 	Asteroid::CleanUpAll();
+	AsteroidPieces::CleanUpAll();
 	Gem::CleanUpAll();
 }
