@@ -30,6 +30,7 @@ void MainGameEntry(PLAY_IGNORE_COMMAND_LINE)
 	// just testing the player spawning
 	gState.player = new Player({ 320,180 }, { 0,0 });
 	gState.player->SetSpeed(5);
+	Play::PlayAudio("Music");
 }
 
 // Called by PlayBuffer every frame (60 times a second!)
@@ -58,6 +59,7 @@ bool MainGameUpdate(float elapsedTime)
 	Play::DrawSpriteRotated("asteroid_pieces_3", { gState.DISPLAY_WIDTH / 2, gState.DISPLAY_HEIGHT / 2 }, 3, 0, 1, 1.0f);
 	Play::DrawFontText("64px", "+", { gState.DISPLAY_WIDTH / 2, gState.DISPLAY_HEIGHT / 2 }, Play::CENTRE);
 
+	gState.totalTime += elapsedTime;
 	CleanUpAll();
 	Play::PresentDrawingBuffer();
 	return Play::KeyDown(VK_ESCAPE);

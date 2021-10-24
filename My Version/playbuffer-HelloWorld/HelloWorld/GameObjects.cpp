@@ -45,6 +45,7 @@ void Meteor::UpdateAll(GameState& gState)
 
 		if (HasCollidedMeteor(gState.player, m) == true)
 		{
+			Play::PlayAudio("combust");
 			gState.player->SetState({ Player::STATE_DEAD });
 		}
 		Play::DrawSpriteRotated("meteor_2", m->GetPosition(), 1, m->GetRotation(), 1, 1.0f);
@@ -91,9 +92,10 @@ void Gem::Update(GameState& gState)
 {
 	for (Gem* g : vGems)
 	{
-		if (HasCollidedGem(gState.player, g) == true)
+		if (HasCollidedGem(gState.player, g) == true && gState.player->GetState() == Player::STATE_FLYING && g->GetDelayTime() < gState.totalTime)
 		{
 			gState.goal -= 1;
+			Play::PlayAudio("reward");
 			g->SetDelete(true);
 		}
 		Play::DrawSpriteRotated("gem", g->GetPosition(), 1, g->GetRotation(), 1, 1.0f);

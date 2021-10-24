@@ -158,7 +158,16 @@ public:
 			}
 		}
 	}
+	void SetDelayTimer(float time)
+	{
+		m_delayTime = time;
+	}
+	float GetDelayTime()
+	{
+		return m_delayTime;
+	}
 private:
+	float m_delayTime{ 1.0f };
 };
 
 class AsteroidPieces : public GameObjects

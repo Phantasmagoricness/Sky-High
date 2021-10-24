@@ -44,6 +44,7 @@ void Player::Update(GameState& gState)
 		if (Play::KeyDown(VK_SPACE))
 		{
 			Gem* g = new Gem(gState.attachedAsteroid->GetPosition());
+			g->SetDelayTimer(g->GetDelayTime() + gState.totalTime);
 			AsteroidPieces* up = new AsteroidPieces(gState.attachedAsteroid->GetPosition(), 0, 0);
 			up->SetVelocity();
 			AsteroidPieces* dLeft = new AsteroidPieces(gState.attachedAsteroid->GetPosition(), 2, 2);
@@ -54,6 +55,7 @@ void Player::Update(GameState& gState)
 			gState.attachedAsteroid = NULL;
 			SetState(0);
 			SetState(STATE_FLYING);
+			Play::PlayAudio("EXPLODE");
 		}
 		SetPosition(GetPosition() + GetVelocity());
 		Play::DrawSpriteRotated("agent8_right_7", GetPosition(), 1, -GetRotation(), 1, 1.0f);

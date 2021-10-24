@@ -12,9 +12,6 @@ struct GameState
 	int DISPLAY_HEIGHT = 720;
 	int DISPLAY_SCALE = 1;
 	// gameobject stuff
-	//std::vector<Meteor*>meteor;
-	//std::vector<Asteroid*>asteroid;
-	//std::vector<Gem*>gem;
 	Player *player;
 	Asteroid *attachedAsteroid;
 	// level stuff
@@ -22,6 +19,7 @@ struct GameState
 	int goal = 0;
 	int numberOfAsteroids = 2;
 	int numberOfMeteors = 2;
+	float totalTime = 0.0f;
 };
 
 int InGameScreen(GameState& gState, Point2f pos, Vector2f velocity);
